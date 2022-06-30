@@ -1,34 +1,92 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Setup
 
-## Getting Started
+1. `npm i`
+2. Use VSCode, make sure the recommended eslint and prettier plugins are installed. Automatic linting should occur when you save!
+3. `npx husky install`. Automatic linting should occur when you commit!
 
-First, run the development server:
+## Commands
 
-```bash
-npm run dev
-# or
-yarn dev
+- `npm run dev`: Runs the local Next.js dev server.
+- `npm run build`: Generates the Next.js production build.
+- `npm start`: Starts the Next.js production build.
+
+## Steps to reproduce template
+
+Note that the actual commits in this repo do not exactly reflect these steps in the same order
+
+`npx create-next-app --ts`
+
+Add `.env` to `.gitignore`.
+
+Add `"baseUrl": "."` to `"compilerOptions"` in `tsconfig.json`
+
+Add to `.eslintrc.json`:
+
+```json
+"rules": {
+  "eqeqeq": "error"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[Linting stuff](https://paulintrognon.fr/blog/typescript-prettier-eslint-next-js):
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+In folder `.vscode`, create `settings.json`:
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```json
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+}
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+And `extensions.json`:
 
-## Learn More
+```json
+{
+  "recommendations": ["dbaeumer.vscode-eslint"]
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+`npm i -D @typescript-eslint/eslint-plugin`, add `"plugin:@typescript-eslint/recommended"` to `"extends"` in `.eslintrc.json`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`npm i -D prettier eslint-config-prettier`, add `"prettier"` to `"extends"` in `.eslintrc.json`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Add to `settings.json`:
 
-## Deploy on Vercel
+```json
+"editor.formatOnSave": true,
+"editor.defaultFormatter": "esbenp.prettier-vscode"
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Add `"esbenp.prettier-vscode"` to `extensions.json`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Create `.prettierrc.json`:
+
+```json
+{
+  "singleQuote": true
+}
+```
+
+Create `.prettierignore`:
+
+```
+.next
+```
+
+`npm i -D husky lint-staged`, `npx husky install`, `npx husky add .husky/pre-commit "npx lint-staged"`
+
+Create `lint-staged.config.js`:
+
+```js
+module.exports = {
+  '**/*.(ts|tsx)': () => 'npx tsc --noEmit',
+  '**/*.(ts|tsx|js)': (filenames) => [
+    `npx eslint --fix ${filenames.join(' ')}`,
+    `npx prettier --write ${filenames.join(' ')}`,
+  ],
+  '**/*.(md|json)': (filenames) =>
+    `npx prettier --write ${filenames.join(' ')}`,
+};
+```
