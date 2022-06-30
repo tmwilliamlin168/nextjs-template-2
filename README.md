@@ -90,3 +90,13 @@ module.exports = {
     `npx prettier --write ${filenames.join(' ')}`,
 };
 ```
+
+[MUI Next.js TypeScript example](https://github.com/mui/material-ui/tree/master/examples/nextjs-with-typescript)
+
+`npm i @mui/material @mui/icons-material @emotion/cache @emotion/react @emotion/server @emotion/styled`.
+
+Add `"jsxImportSource": "@emotion/react"` to `tsconfig.json`.
+
+Basically copy in `pages/` and `src/`.
+
+Remove `styles/`.
