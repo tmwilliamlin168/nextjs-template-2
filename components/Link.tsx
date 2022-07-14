@@ -51,7 +51,7 @@ export type LinkProps = {
 // https://nextjs.org/docs/api-reference/next/link
 const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   props,
-  ref
+  ref,
 ) {
   const {
     activeClassName = 'active',
